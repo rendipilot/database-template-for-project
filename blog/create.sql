@@ -1,0 +1,23 @@
+CREATE TYPE user_role AS ENUM("SUPERADMIN", "AUTHOR");
+
+CREATE TYPE content_status AS ENUM("DRAFT", "PUBLISHED", "ARCHIVED");
+
+CREATE TABLE users(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid()
+    name VARCHAR(50) NOT NULL,
+    role user_role DEFAULT "AUTHOR"
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE contents(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid()
+    user_Id REFERENCES users(id) ON DELETE SET NULL,
+    title TEXT NOT NULL,
+    data TEXT NOT NULL,
+    status content_status DEFAULT "DRAFT",
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
